@@ -1,7 +1,7 @@
 {
-  "name": "eggd_<tool_name>",
-  "title": "eggd_<tool_name>",
-  "summary": "description",
+  "name": "eggd_ctatsplicing",
+  "title": "eggd_ctatsplicing",
+  "summary": "App which runs CTAT-Splicing",
   "dxapi": "1.0.0",
   "version": "1.0.0",
   "properties": {
@@ -9,63 +9,121 @@
     },
   "inputSpec": [
     {
-      "name": "input_file",
+      "name": "ctatsplicing_tar",
       "class": "file",
-      "optional": true,
-      "label": "Name of input file",
-      "patterns": [
-        "*.tsv", "*.vcf", "*.bed", "*.xlsx"
-      ],
-      "help": "Description"
-    },
-    {
-      "name": "input_file_array",
-      "class": "array:file",
       "optional": false,
-      "label": "Name of input file array",
-      "suggestions": [
-        {
-        "project": "project-Fkb6Gkj433GVVvj73J7x8KbV",
-        "path": "/folder1/folder2/"
-        }
+      "label": "ctatsplicing_tar",
+      "help": "CTAT-Splicing docker tar file"
+    },
+    {
+      "name": "genome_lib",
+      "label": "CTAT genome library",
+      "help": "A CTAT genome library, which is a reference file bundle required by Trinity CTAT tools. This contains the genome indices and reference genome that are needed to run CTAT-Splicing.",
+      "class": "file",
+      "default": {"$dnanexus_link": "file-GJfX12j41p4GY5K3PY65VFjj"},
+      "optional": false
+    },
+    {
+      "name": "cancer_splicing_index",
+      "label": "Cancer splicing index",
+      "help": "An index file for the ~24k introns that are enriched for splicing in tumor tissues as compared to normal tissues. It is required to run CTAT-Splicing.",
+      "class": "file",
+      "default": {"$dnanexus_link": "file-J6Zq0004kZ29G9g4JPP7pPFy"},
+      "optional": false
+    },
+    {
+      "name": "refGene",
+      "label": "refGene",
+      "help": "The refGene.bam required to run CTAT-Splicing",
+      "class": "file",
+      "default": {"$dnanexus_link": "file-J6Zq05j4kZ26qFZyp841f6qk"},
+      "optional": false
+    },
+    {
+      "name": "refGene_sort",
+      "label": "refGene sorted",
+      "help": "The refGene.sort.bed.gz required to run CTAT-Splicing",
+      "class": "file",
+      "default": {"$dnanexus_link": "file-J6Zq0684kZ26qFZyp841f6qq"},
+      "optional": false
+    },
+    {
+      "name": "refGene_sort_tbi",
+      "label": "refGene sorted tbi",
+      "help": "The refGene.sort.bed.gz.tbi required to run CTAT-Splicing",
+      "class": "file",
+      "default": {"$dnanexus_link": "file-J6Zq06Q4kZ26qFZyp841f6qx"},
+      "optional": false
+    },
+    {
+      "name": "splice_junction",
+      "label": "Splice Junction file",
+      "class": "file",
+      "optional": false,
+      "patterns": [
+        "*.SJ.out.tab"
       ],
-      "help": "Description"
+      "help": "SJ.out.tab file identifing introns and reported by STAR/eggd_staraligner. Input file required."
     },
     {
-      "name": "input_boolean",
-      "class": "boolean",
-      "optional": true,
-      "default": true,
-      "label": "Name of field",
-      "help": "Description"
+      "name": "chimeric_junction",
+      "label": "",
+      "class": "file",
+      "optional": false,
+      "patterns": [
+        "*.chimeric.out.junction"
+      ],
+      "help": "Chimeric read alignments reported by STAR/eggd_staraligner. Input file required."
     },
     {
-      "name": "input_string",
-      "class": "string",
-      "label": "Input string field name",
-      "optional": true,
-      "default": "default string input",
-      "help": "Description"
-    }
+      "name": "bam",
+      "label": "bam",
+      "class": "file",
+      "optional": false,
+      "patterns": [
+        "*.bam"
+      ],
+      "help": "RNA-Seq BAM file from STAR/eggd_staraligner. Required for visualization, ideally coordinate-sorted or will be coordinate-sorted as part of the CTAT-Splicing run."
+    },
+    {
+      "name": "bam_index",
+      "label": "bam_index",
+      "class": "file",
+      "optional": false,
+      "patterns": [
+        "*.bai"
+      ],
+      "help": "RNA-Seq BAM Index file from STAR/eggd_staraligner."
+    },
   ],
   "outputSpec": [
     {
-      "name": "output_file",
+      "name": "output_introns",
       "class": "file",
-      "label": "output file",
+      "label": "output introns file",
       "patterns": [
-        "*.tsv", "*.vcf", "*.bed", "*.xlsx"
+        "*.introns"
       ],
-      "help": "Description"
+      "help": "Introns reported by STAR and annotated according to genes containing corresponding splice junctions."
     },
     {
-      "name": "output_files_array",
-      "class": "array:file",
-      "label": "output files",
-      "optional": true,
-      "help": "Description"
+      "name": "output_cancer_introns",
+      "class": "file",
+      "label": "output cancer introns file",
+      "patterns": [
+        "*.cancer.introns"
+      ],
+      "help": "The list of candidate 'cancer introns' - those introns found to be enriched in cancer transcriptome samples. Entries reported here must meet the minimum read alignments required ( --min_total_reads, default 5)"
     }
-
+    {
+      "name": "output_igv_html",
+      "class": "file",
+      "label": "output IGV.html file for cancer introns",
+      "patterns": [
+        "*.ctat-splicing.igv.html"
+      ],
+      "help": "A self-contained interactive IGV-report in html format based on the cancer.introns report."
+    }
   ],
   "runSpec": {
     "timeoutPolicy": {
@@ -77,27 +135,7 @@
     "release": "20.04",
     "version": "0",
     "interpreter": "bash",
-    "file": "src/code.sh",
-    "assetDepends": [
-      {
-        "name": "bedtools",
-        "project": "project-Fkb6Gkj433GVVvj73J7x8KbV",
-        "folder": "/app_assets/bedtools/bedtools_v2.30.0",
-        "version": "2.30.0"
-      },
-      {
-        "name": "htslib",
-        "project": "project-Fkb6Gkj433GVVvj73J7x8KbV",
-        "folder": "/app_assets/htslib/htslib_v1.15.0",
-        "version": "1.15.0"
-      },
-      {
-        "name": "python_packages",
-        "project": "project-Fkb6Gkj433GVVvj73J7x8KbV",
-        "folder": "/app_assets/python_packages/python_packages_v1.1.0",
-        "version": "1.1.0"
-      }
-    ]
+    "file": "src/code.sh"
   },
   "developers":[
     "org-emee_1"
@@ -109,7 +147,7 @@
     "aws:eu-central-1": {
       "systemRequirements": {
         "*": {
-          "instanceType": "mem1_ssd1_v2_x2"
+          "instanceType": "mem1_ssd1_v2_x8"
         }
       }
     }
