@@ -62,7 +62,7 @@ _call_ctatsplicing() {
     : '''
     Run CTAT-Splicing to identify cancer introns in the sample of interest
     '''
-    docker run --rm -it \
+    docker run --rm \
         -v /home/dnanexus:/data \
         ${docker_image_id} /bin/bash -c "python ${ctat_python_cmd} \
             --SJ_tab_file /data/input/$(ls /home/dnanexus/input/*SJ.out.tab | xargs -n1 basename) \
