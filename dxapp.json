@@ -13,7 +13,8 @@
       "class": "file",
       "optional": false,
       "label": "ctatsplicing_tar",
-      "help": "CTAT-Splicing docker tar file"
+      "help": "CTAT-Splicing docker tar file",
+      "default": {"$dnanexus_link": "file-J71zJ7840Jz03k9vxqQjPxFZ"}
     },
     {
       "name": "genome_lib",
@@ -98,31 +99,11 @@
   ],
   "outputSpec": [
     {
-      "name": "output_introns",
+      "name": "ctatsplicing_full",
       "class": "file",
-      "label": "output introns file",
-      "patterns": [
-        "*.introns"
-      ],
-      "help": "Introns reported by STAR and annotated according to genes containing corresponding splice junctions."
-    },
-    {
-      "name": "output_cancer_introns",
-      "class": "file",
-      "label": "output cancer introns file",
-      "patterns": [
-        "*.cancer.introns"
-      ],
-      "help": "The list of candidate 'cancer introns' - those introns found to be enriched in cancer transcriptome samples. Entries reported here must meet the minimum read alignments required ( --min_total_reads, default 5)"
-    }
-    {
-      "name": "output_igv_html",
-      "class": "file",
-      "label": "output IGV.html file for cancer introns",
-      "patterns": [
-        "*.ctat-splicing.igv.html"
-      ],
-      "help": "A self-contained interactive IGV-report in html format based on the cancer.introns report."
+      "label": "ctatsplicing_full",
+      "optional": false,
+      "help": "CTAT-Splicing full output files"
     }
   ],
   "runSpec": {
