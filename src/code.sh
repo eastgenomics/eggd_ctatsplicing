@@ -89,5 +89,5 @@ _upload_outputs() {
 main() {
     _download_and_setup
     _call_ctatsplicing
-    dx-upload-all-outputs
+    _upload_outputs
 }
