@@ -15,7 +15,11 @@ _download_and_setup() {
     Downloads input files, unpacks, set environment variables, and other setup steps
     '''
     mkdir -p /home/dnanexus/genome_lib \
-        /home/dnanexus/input
+        /home/dnanexus/input \
+        /home/dnanexus/out/cancer_introns \
+        /home/dnanexus/out/introns \
+        /home/dnanexus/out/html_igv_introns \
+        /home/dnanexus/out/ctatsplicing_chckpts
 
     dx-download-all-inputs --parallel
 
@@ -74,7 +78,12 @@ _upload_outputs() {
     : '''
     Upload and save outputs
     '''
-    mv /home/dnanexus/out/introns
+    mv /home/dnanexus/out/${sample_name}.cancer.introns /home/dnanexus/out/cancer_introns
+    mv /home/dnanexus/out/${sample_name}.introns /home/dnanexus/out/introns
+    mv /home/dnanexus/out/${sample_name}.ctat-splicing.igv.html /home/dnanexus/out/html_igv_introns
+    mv /home/dnanexus/out/${sample_name}.chckpts /home/dnanexus/out/ctatsplicing_chckpts
+
+    dx-upload-all-outputs
 }
 
 main() {
