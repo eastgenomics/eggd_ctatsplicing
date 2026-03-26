@@ -28,7 +28,8 @@ _download_and_setup() {
     #Set up required environment variables, export to be available to child processes
     export lib_dir \
         docker_image_id \
-        ctat_python_cmd
+        ctat_python_cmd \
+        sample_name
     
     # Extract CTAT library filename
     lib_dir=$(find /home/dnanexus/genome_lib -type d -name "*" -mindepth 1 -maxdepth 1 | rev | cut -d'/' -f-1 | rev)
@@ -36,7 +37,9 @@ _download_and_setup() {
     docker_image_id=$(docker images --format="{{.Repository}} {{.ID}}" | grep "^trinityctat/ctat_splicing" | cut -d' ' -f2)
     #Extract CTAT tool directory:
     ctat_python_cmd=$(docker run --rm $docker_image_id /bin/bash -c "find /usr/local/src -name STAR_to_cancer_introns.py")
-
+    #Extract Sample Name:
+    sample_name=$(ls /home/dnanexus/input/*.star.bam | xargs -n1 basename | awk -F "." '{print $1}')
+    
     #Move required files into correct folders:
     ##cancer_splicing.idx:
     mkdir -p /home/dnanexus/genome_lib/${lib_dir}/ctat_genome_lib_build_dir/cancer_splicing_lib
@@ -63,8 +66,15 @@ _call_ctatsplicing() {
             --bam_file /data/input/$(ls /home/dnanexus/input/*.star.bam | xargs -n1 basename) \
             --vis \
             --ctat_genome_lib /data/genome_lib/${lib_dir}/ctat_genome_lib_build_dir \
-            --output_prefix /data/out/ctatsplicing_full/$(ls /home/dnanexus/input/*.star.bam | xargs -n1 basename | awk -F "." '{print $1}') \
-            --sample_name $(ls /home/dnanexus/input/*.star.bam | xargs -n1 basename | awk -F "." '{print $1}')"
+            --output_prefix /data/out/ctatsplicing_full/${sample_name} \
+            --sample_name ${sample_name}"
+}
+
+_upload_outputs() {
+    : '''
+    Upload and save outputs
+    '''
+    mv /home/dnanexus/out/introns
 }
 
 main() {
