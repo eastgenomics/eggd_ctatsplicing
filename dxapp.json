@@ -95,7 +95,7 @@
         "*.bai"
       ],
       "help": "RNA-Seq BAM Index file from STAR/eggd_staraligner."
-    },
+    }
   ],
   "outputSpec": [
     {
