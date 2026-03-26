@@ -12,11 +12,12 @@ eggd_ctatsplicing can be used to detect aberrant splicing events happening in ca
 
 ## What are the inputs?
 ### Dependencies:
+<li>
 ::marker
 <code>--ctatsplicing_tar</code>
 :(file) CTAT-Splicing docker tar file.
+<li>
 
-::marker
 <code>--genome_lib</code>
 :(file) A CTAT genome library, which is a reference file bundle required by Trinity CTAT tools. This contains the genome indices and reference genome that are needed to run CTAT-Splicing.
 
