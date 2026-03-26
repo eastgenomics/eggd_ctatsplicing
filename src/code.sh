@@ -42,7 +42,7 @@ _download_and_setup() {
     #Extract CTAT tool directory:
     ctat_python_cmd=$(docker run --rm $docker_image_id /bin/bash -c "find /usr/local/src -name STAR_to_cancer_introns.py")
     #Extract Sample Name:
-    sample_name=$(ls /home/dnanexus/input/*.star.bam | xargs -n1 basename | awk -F "." '{print $1}')
+    sample_name=$(ls /home/dnanexus/in/bam/*.star.bam | xargs -n1 basename | awk -F "." '{print $1}')
     
     #Move required files into correct folders:
     ##cancer_splicing.idx:
