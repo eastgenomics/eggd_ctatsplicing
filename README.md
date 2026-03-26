@@ -12,7 +12,6 @@ eggd_ctatsplicing can be used to detect aberrant splicing events happening in ca
 
 ## What are the inputs?
 <li>
-::marker
 <code>--genome_lib</code>
 :(file) 
 <li>
