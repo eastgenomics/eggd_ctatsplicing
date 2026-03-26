@@ -1,16 +1,21 @@
 <!-- dx-header -->
-# AmazingApp (DNAnexus Platform App)
-This could be used as a starting point when developing new apps for DNAnexus
+# eggd_ctatsplicing
 
 <!-- Insert a description of your app here -->
 ## What does this app do?
-Provide a brief description of this tool.
+eggd_ctatsplicing is a DNA-Nexus app to use CTAT-Splicing (https://github.com/TrinityCTAT/CTAT-SPLICING).
+For a given sample, the app detects aberrant splicing events/introns and highlights those enriched in cancer.
+More info on how the introns were found enriched in cancer is reported in the CTAT-Splicing GitHub.
 
 ## What are the typical use cases for this app?
-Describe use cases of the app.
+eggd_ctatsplicing can be used to detect aberrant splicing events happening in cancer. For example, eggd_ctatsplicing can identify the MET14del which is often present in lung adenocarcinoma. The app works with transcriptome (bam files from RNA-Seq).
 
 ## What are the inputs?
-- list the required input files, specifying any formatting requirements
+<li>
+::marker
+<code>--genome_lib</code>
+:(file) 
+<li>
 
 ## What are the outputs?
 - list the expected output files, specifying the format
