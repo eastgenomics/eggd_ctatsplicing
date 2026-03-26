@@ -99,11 +99,38 @@
   ],
   "outputSpec": [
     {
-      "name": "ctatsplicing_full",
+      "name": "cancer_introns",
+      "label": "cancer_introns",
       "class": "file",
-      "label": "ctatsplicing_full",
+      "patterns": [
+        "*.cancer.introns"
+      ],
+      "help": "List of candidate cancer introns found in the tested sample."
+    },
+    {
+      "name": "introns",
+      "label": "introns",
+      "class": "file",
+      "patterns": [
+        "*.introns"
+      ],
+      "help": "List of all introns found in the tested sample. Introns as reported by STAR and annotated according to genes containing corresponding splice junctions."
+    },
+    {
+      "name": "html_igv_introns",
+      "label": "html_igv_introns",
+      "class": "file",
+      "patterns": [
+        "*.ctat-splicing.igv.html"
+      ],
+      "help": "Self-contained interactive IGV-report in html format based on the *.cancer.introns report."
+    },
+    {
+      "name": "ctatsplicing_chckpts",
+      "class": "folder",
+      "label": "ctatsplicing_chckpts",
       "optional": false,
-      "help": "CTAT-Splicing full output files"
+      "help": "CTAT-Splicing checkpoints folder tracking tests for each sub-task"
     }
   ],
   "runSpec": {
