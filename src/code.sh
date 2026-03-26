@@ -70,7 +70,7 @@ _call_ctatsplicing() {
             --bam_file /data/input/$(ls /home/dnanexus/input/*.star.bam | xargs -n1 basename) \
             --vis \
             --ctat_genome_lib /data/genome_lib/${lib_dir}/ctat_genome_lib_build_dir \
-            --output_prefix /data/out/ctatsplicing_full/${sample_name} \
+            --output_prefix /data/out/${sample_name} \
             --sample_name ${sample_name}"
 }
 
