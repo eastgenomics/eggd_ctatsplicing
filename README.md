@@ -12,19 +12,22 @@ eggd_ctatsplicing can be used to detect aberrant splicing events happening in ca
 
 ## What are the inputs?
 ### Dependencies:
+::marker
 <code>--ctatsplicing_tar</code>
 :(file) CTAT-Splicing docker tar file.
 
+::marker
 <code>--genome_lib</code>
 :(file) A CTAT genome library, which is a reference file bundle required by Trinity CTAT tools. This contains the genome indices and reference genome that are needed to run CTAT-Splicing.
 
+::marker
 <code>--cancer_splicing_index</code>
 :(file) An index file for the ~24k introns that are enriched for splicing in tumor tissues as compared to normal tissues. It is required to run CTAT-Splicing. Generated with CTAT-SPLICING/prep_genome_lib/ctat-splicing-lib-integration.py.
 
 <code>--refGene</code>
 :(file) The refGene.bam required to run CTAT-Splicing. Generated with CTAT-SPLICING/prep_genome_lib/ctat-splicing-lib-integration.py.
 
-<code>--refGene_sort</code>
+::marker<code>--refGene_sort</code>
 :(file) The refGene.sort.bed.gz required to run CTAT-Splicing. Generated with CTAT-SPLICING/prep_genome_lib/ctat-splicing-lib-integration.py.
 
 <code>--refGene_sort_tbi</code>
