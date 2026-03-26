@@ -1,29 +1,74 @@
 #!/bin/bash
-# eggd_app
+# eggd_ctatsplicing
+
+
+# prefixes all lines of commands written to stdout with datetime
+PS4='\000[$(date)]\011'
+export TZ=Europe/London
 
 # Exit at any point if there is any error and output each line as it is executed (for debugging)
 # -e = exit on error; -x = output each line that is executed to log; -o pipefail = throw an error if there's an error in pipeline
 set -e -x -o pipefail
 
-main() {
-    # Install packages if required
+_download_and_setup() {
+    : '''
+    Downloads input files, unpacks, set environment variables, and other setup steps
+    '''
+    mkdir -p /home/dnanexus/genome_lib \
+        /home/dnanexus/input
 
-    ## Download input files (individual or an array)
-    # either all at once, in which case they are placed into separate folders
     dx-download-all-inputs --parallel
-    # Each input is placed under its own subfolder "~/in/name_of_input_field/", named after the input field.
-    # can be accessed by using $input_file_path variable or
-    # $input_file_name equivalent to basename command,
-    # $input_file_prefix filename without the extension
-    #  also for array of files input, individual files are downloaded into subfolders
-    # /in/input_file_array/0/file0 and /in/input_file_array/1/file1 and so on
-    # in which case they have to be moved manually into the same folder, if needed
-    mkdir input_files
-    find ~/in/input_file_array -type f -name "*" -print0 | xargs -0 -I {} mv {} ~/input_files
 
-    # or files can be downloaded one by one, specifying a name for them within the workstation
-    dx download "$input_file" -o input_file_name
+    # Unpack tarred files 
+    tar xvzf /home/dnanexus/in/genome_lib/*.tar.gz -C /home/dnanexus/genome_lib
 
+    #Load docker image:
+    docker load -i /home/dnanexus/in/ctatsplicing_tar/*.tar.gz
     
+    #Set up required environment variables, export to be available to child processes
+    export lib_dir \
+        docker_image_id \
+        ctat_python_cmd
+    
+    # Extract CTAT library filename
+    lib_dir=$(find /home/dnanexus/genome_lib -type d -name "*" -mindepth 1 -maxdepth 1 | rev | cut -d'/' -f-1 | rev)
+    #Extract docker image id:
+    docker_image_id=$(docker images --format="{{.Repository}} {{.ID}}" | grep "^trinityctat/ctat_splicing" | cut -d' ' -f2)
+    #Extract CTAT tool directory:
+    ctat_python_cmd=$(docker run --rm $docker_image_id /bin/bash -c "find /usr/local/src -name STAR_to_cancer_introns.py")
 
+    #Move required files into correct folders:
+    ##cancer_splicing.idx:
+    mkdir -p /home/dnanexus/genome_lib/${lib_dir}/ctat_genome_lib_build_dir/cancer_splicing_lib
+    mv /home/dnanexus/in/cancer_splicing_index/*.idx /home/dnanexus/genome_lib/${lib_dir}/ctat_genome_lib_build_dir/cancer_splicing_lib/cancer_splicing.idx
+    ##refGene.bed,refGene.sort.bed.gz, and refGene.sort.bed.gz.tbi :
+    mv /home/dnanexus/in/refGene*/refGene.*bed* /home/dnanexus/genome_lib/${lib_dir}/ctat_genome_lib_build_dir/
+    
+    #Move patient's input files into correct folder:
+    mv /home/dnanexus/in/splice_junction/*.SJ.out.tab /home/dnanexus/input/
+    mv /home/dnanexus/in/chimeric_junction/*.chimeric.out.junction /home/dnanexus/input/
+    mv /home/dnanexus/in/bam/*.star.bam /home/dnanexus/input/
+    mv /home/dnanexus/in/bam_index/*.star.bam.bai /home/dnanexus/input/
+}
+
+_call_ctatsplicing() {
+    : '''
+    Run CTAT-Splicing to identify cancer introns in the sample of interest
+    '''
+    docker run --rm -it \
+        -v /home/dnanexus:/data \
+        ${docker_image_id} /bin/bash -c "python ${ctat_python_cmd} \
+            --SJ_tab_file /data/input/$(ls /home/dnanexus/input/*SJ.out.tab | xargs -n1 basename) \
+            --chimJ_file /data/input/$(ls /home/dnanexus/input/*chimeric.out.junction | xargs -n1 basename) \
+            --bam_file /data/input/$(ls /home/dnanexus/input/*.star.bam | xargs -n1 basename) \
+            --vis \
+            --ctat_genome_lib /data/genome_lib/${lib_dir}/ctat_genome_lib_build_dir \
+            --output_prefix /data/out/ctatsplicing_full/$(ls /home/dnanexus/input/*.star.bam | xargs -n1 basename | awk -F "." '{print $1}') \
+            --sample_name $(ls /home/dnanexus/input/*.star.bam | xargs -n1 basename | awk -F "." '{print $1}')"
+}
+
+main() {
+    _download_and_setup
+    _call_ctatsplicing
+    dx-upload-all-outputs
 }
