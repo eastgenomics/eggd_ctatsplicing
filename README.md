@@ -69,7 +69,7 @@ eggd_ctatsplicing can be used to detect aberrant splicing events happening in ca
 
 <li>
 <code>--ctatsplicing_chckpts</code>
-:(folder) CTAT-Splicing checkpoints folder tracking tests for each sub-task.
+:(folder) CTAT-Splicing checkpoints files for each sub-task.
 
 ## How to run this app from command line?
 ```
