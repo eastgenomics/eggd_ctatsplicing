@@ -35,7 +35,7 @@
     {
       "name": "refGene",
       "label": "refGene",
-      "help": "The refGene.bam required to run CTAT-Splicing",
+      "help": "The refGene.bed required to run CTAT-Splicing",
       "class": "file",
       "default": {"$dnanexus_link": "file-J6Zq05j4kZ26qFZyp841f6qk"},
       "optional": false

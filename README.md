@@ -26,7 +26,7 @@ eggd_ctatsplicing can be used to detect aberrant splicing events happening in ca
 
 <li>
 <code>--refGene</code>
-:(file) The refGene.bam required to run CTAT-Splicing. Generated with CTAT-SPLICING/prep_genome_lib/ctat-splicing-lib-integration.py.
+:(file) The refGene.bed required to run CTAT-Splicing. Generated with CTAT-SPLICING/prep_genome_lib/ctat-splicing-lib-integration.py.
 
 <li>
 <code>--refGene_sort</code>
