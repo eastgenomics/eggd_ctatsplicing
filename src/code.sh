@@ -83,7 +83,6 @@ _upload_outputs() {
     mv /home/dnanexus/out/${sample_name}.ctat-splicing.igv.html /home/dnanexus/out/html_igv_introns
     mv /home/dnanexus/out/${sample_name}.chckpts/* /home/dnanexus/out/ctatsplicing_chckpts/
     rm -r /home/dnanexus/out/${sample_name}.chckpts
-
     dx-upload-all-outputs
 }
 

@@ -127,10 +127,12 @@
     },
     {
       "name": "ctatsplicing_chckpts",
-      "class": "folder",
+      "class": "array:file",
       "label": "ctatsplicing_chckpts",
+      "patterns": ["*.ok"
+      ],
       "optional": false,
-      "help": "CTAT-Splicing checkpoints folder tracking tests for each sub-task"
+      "help": "CTAT-Splicing checkpoints files tracking tests for each sub-task"
     }
   ],
   "runSpec": {
