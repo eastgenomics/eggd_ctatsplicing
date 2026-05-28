@@ -74,9 +74,8 @@ dx run app-<app_id> \
     -ibam=file-<file_ID>  \
     -ibam_index=file-<file_ID> \
     -imin_unique_read=5 \
-    --destination project-<project-ID>:/folder_name/     \
+    --destination project-<project-ID>:/folder_name/ \
     -y --brief
-
 ```
 
 ### This app was made by EMEE GLH
