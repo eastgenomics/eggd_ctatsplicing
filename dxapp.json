@@ -33,27 +33,11 @@
       "optional": false
     },
     {
-      "name": "refGene",
-      "label": "refGene",
-      "help": "The refGene.bed required to run CTAT-Splicing",
-      "class": "file",
-      "default": {"$dnanexus_link": "file-J6Zq05j4kZ26qFZyp841f6qk"},
-      "optional": false
-    },
-    {
       "name": "refGene_sort",
       "label": "refGene sorted",
       "help": "The refGene.sort.bed.gz required to run CTAT-Splicing",
       "class": "file",
       "default": {"$dnanexus_link": "file-J6Zq0684kZ26qFZyp841f6qq"},
-      "optional": false
-    },
-    {
-      "name": "refGene_sort_tbi",
-      "label": "refGene sorted tbi",
-      "help": "The refGene.sort.bed.gz.tbi required to run CTAT-Splicing",
-      "class": "file",
-      "default": {"$dnanexus_link": "file-J6Zq06Q4kZ26qFZyp841f6qx"},
       "optional": false
     },
     {
@@ -95,6 +79,15 @@
         "*.bai"
       ],
       "help": "RNA-Seq BAM Index file from STAR/eggd_staraligner."
+    },
+        {
+      "name": "min_unique_read",
+      "label": "min_unique_read",
+      "class": "int",
+      "optional": true,
+      "patterns": ["*"],
+      "default": 5,
+      "help": "The value threshold for minimum read count to filter the cancer introns, used by the script filter_by_min_total_reads.py. Default is 5."
     }
   ],
   "outputSpec": [
@@ -123,7 +116,8 @@
       "patterns": [
         "*.ctat-splicing.igv.html"
       ],
-      "help": "Self-contained interactive IGV-report in html format based on the *.cancer.introns report."
+      "optional": true,
+      "help": "Self-contained interactive IGV-report in html format based on the *.cancer.introns report. It is not created if no cancer introns are found."
     },
     {
       "name": "ctatsplicing_chckpts",
