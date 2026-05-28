@@ -60,7 +60,7 @@ eggd_ctatsplicing can be used to detect aberrant splicing events happening in ca
 
 <li>
 <code>--html_igv_introns</code>
-:(file, **.ctat-splicing.igv.html) Self-contained interactive IGV-report in html format based on the *.cancer.introns report. It is not created if no cancer introns are found.
+:(file, *.ctat-splicing.igv.html) Self-contained interactive IGV-report in html format based on the *.cancer.introns report. It is not created if no cancer introns are found.
 
 <li>
 <code>--ctatsplicing_chckpts</code>
