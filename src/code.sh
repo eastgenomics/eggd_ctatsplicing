@@ -48,7 +48,7 @@ _download_and_setup() {
     ##cancer_splicing.idx:
     mkdir -p /home/dnanexus/genome_lib/${lib_dir}/ctat_genome_lib_build_dir/cancer_splicing_lib
     mv /home/dnanexus/in/cancer_splicing_index/*.idx /home/dnanexus/genome_lib/${lib_dir}/ctat_genome_lib_build_dir/cancer_splicing_lib/cancer_splicing.idx
-    ##refGene.bed,refGene.sort.bed.gz, and refGene.sort.bed.gz.tbi :
+    ##refGene.sort.bed.gz:
     mv /home/dnanexus/in/refGene*/refGene.*bed* /home/dnanexus/genome_lib/${lib_dir}/ctat_genome_lib_build_dir/
     
     #Move patient's input files into correct folder:
@@ -70,6 +70,7 @@ _call_ctatsplicing() {
             --bam_file /data/input/$(ls /home/dnanexus/input/*.star.bam | xargs -n1 basename) \
             --vis \
             --ctat_genome_lib /data/genome_lib/${lib_dir}/ctat_genome_lib_build_dir \
+            --min_total_reads ${min_unique_read} \
             --output_prefix /data/out/${sample_name} \
             --sample_name ${sample_name}"
 }
@@ -78,9 +79,12 @@ _upload_outputs() {
     : '''
     Upload and save outputs
     '''
-    mv /home/dnanexus/out/${sample_name}.cancer.introns /home/dnanexus/out/cancer_introns
-    mv /home/dnanexus/out/${sample_name}.introns /home/dnanexus/out/introns
-    mv /home/dnanexus/out/${sample_name}.ctat-splicing.igv.html /home/dnanexus/out/html_igv_introns
+    mv /home/dnanexus/out/${sample_name}.cancer.introns /home/dnanexus/out/cancer_introns/
+    mv /home/dnanexus/out/${sample_name}.introns /home/dnanexus/out/introns/
+    if [ -f /home/dnanexus/out/${sample_name}.ctat-splicing.igv.html ]; then
+        echo "igv.html report exists"
+        mv /home/dnanexus/out/${sample_name}.ctat-splicing.igv.html /home/dnanexus/out/html_igv_introns/
+    fi
     mv /home/dnanexus/out/${sample_name}.chckpts/* /home/dnanexus/out/ctatsplicing_chckpts/
     rm -r /home/dnanexus/out/${sample_name}.chckpts
     dx-upload-all-outputs
