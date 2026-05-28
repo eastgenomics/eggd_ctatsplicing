@@ -84,7 +84,7 @@
       "name": "min_unique_read",
       "label": "min_unique_read",
       "class": "int",
-      "optional": true,
+      "optional": false,
       "patterns": ["*"],
       "default": 5,
       "help": "The value threshold for minimum read count to filter the cancer introns, used by the script filter_by_min_total_reads.py. Default is 5."
