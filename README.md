@@ -25,17 +25,12 @@ eggd_ctatsplicing can be used to detect aberrant splicing events happening in ca
 :(file) An index file for the ~24k introns that are enriched for splicing in tumor tissues as compared to normal tissues. It is required to run CTAT-Splicing. Generated with CTAT-SPLICING/prep_genome_lib/ctat-splicing-lib-integration.py.
 
 <li>
-<code>--refGene</code>
-:(file) The refGene.bed required to run CTAT-Splicing. Generated with CTAT-SPLICING/prep_genome_lib/ctat-splicing-lib-integration.py.
-
-<li>
 <code>--refGene_sort</code>
 :(file) The refGene.sort.bed.gz required to run CTAT-Splicing. Generated with CTAT-SPLICING/prep_genome_lib/ctat-splicing-lib-integration.py.
 
 <li>
-<code>--refGene_sort_tbi</code>
-:(file) The refGene.sort.bed.gz.tbi required to run CTAT-Splicing. Generated with CTAT-SPLICING/prep_genome_lib/ctat-splicing-lib-integration.py.
-
+<code>--min_unique_read</code>
+:(int) The value threshold for minimum read count to filter the cancer introns, used by the script filter_by_min_total_reads.py. Default is 5.
 
 ### Sample specific input files:
 <li>
@@ -65,7 +60,7 @@ eggd_ctatsplicing can be used to detect aberrant splicing events happening in ca
 
 <li>
 <code>--html_igv_introns</code>
-:(file, **.ctat-splicing.igv.html) Self-contained interactive IGV-report in html format based on the *.cancer.introns report.
+:(file, *.ctat-splicing.igv.html) Self-contained interactive IGV-report in html format based on the *.cancer.introns report. It is not created if no cancer introns are found.
 
 <li>
 <code>--ctatsplicing_chckpts</code>
@@ -73,9 +68,14 @@ eggd_ctatsplicing can be used to detect aberrant splicing events happening in ca
 
 ## How to run this app from command line?
 ```
-add an example command of running this app from the CLI \
-especially the (optional) inputs \
-and recommended istance_type
+dx run app-<app_id> \
+    -isplice_junction=file-<file_ID> \
+    -ichimeric_junction=file-<file_ID>  \
+    -ibam=file-<file_ID>  \
+    -ibam_index=file-<file_ID> \
+    -imin_unique_read=5 \
+    --destination project-<project-ID>:/folder_name/ \
+    -y --brief
 ```
 
 ### This app was made by EMEE GLH
